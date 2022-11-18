@@ -8,6 +8,6 @@ public class HelloController {
 
     @GetMapping
     public String hello(){
-        return "Olá, bem-vindo Spring Rest API!";
+        return "Olá, bem-vindo! Desenvolvido por Rodrigo Dev Back End Java";
     }
 }
