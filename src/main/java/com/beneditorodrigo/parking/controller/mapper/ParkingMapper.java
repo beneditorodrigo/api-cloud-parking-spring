@@ -1,5 +1,6 @@
 package com.beneditorodrigo.parking.controller.mapper;
 
+import com.beneditorodrigo.parking.controller.dto.ParkingCreateDTO;
 import com.beneditorodrigo.parking.controller.dto.ParkingDTO;
 import com.beneditorodrigo.parking.model.Parking;
 import org.modelmapper.ModelMapper;
@@ -19,5 +20,13 @@ public class ParkingMapper {
 
     public List<ParkingDTO> toParkingDTOList(List<Parking> parkingList){
         return parkingList.stream().map(this::toParkingDTO).collect(Collectors.toList());
+    }
+
+    public Parking toParking(ParkingDTO dto){
+        return MODEL_MAPPER.map(dto, Parking.class);
+    }
+
+    public Parking toParkingCreate(ParkingCreateDTO dto) {
+        return MODEL_MAPPER.map(dto, Parking.class);
     }
 }
