@@ -1,6 +1,7 @@
 package com.beneditorodrigo.parking.controller;
 
 import com.beneditorodrigo.parking.model.Parking;
+import com.beneditorodrigo.parking.service.ParkingService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,13 +13,14 @@ import java.util.List;
 @RequestMapping("/parking")
 public class ParkingController {
 
+    private final ParkingService parkingService;
+
+    public ParkingController(ParkingService parkingService) {
+        this.parkingService = parkingService;
+    }
+
     @GetMapping
     public List<Parking> findAll(){
-        var parking = new Parking();
-        parking.setLicense("QRS-12V5");
-        parking.setState("PI");
-        parking.setModel("HILUX SRV");
-        parking.setColor("Branca");
-        return Arrays.asList(parking, parking);
+        return parkingService.findAll();
     }
 }
