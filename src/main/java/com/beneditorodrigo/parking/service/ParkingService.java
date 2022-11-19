@@ -48,4 +48,9 @@ public class ParkingService {
         parkingMap.put(uuid, parkingCreate);
         return parkingCreate;
     }
+
+    public void delete(String id) {
+        Parking parking = findById(id);
+        parkingMap.remove(id);
+    }
 }

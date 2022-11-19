@@ -50,4 +50,11 @@ public class ParkingController {
         ParkingDTO result = parkingMapper.toParkingDTO(parking);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation("Delete Parking with ID")
+    public ResponseEntity deleteParking(@PathVariable String id){
+        parkingService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
