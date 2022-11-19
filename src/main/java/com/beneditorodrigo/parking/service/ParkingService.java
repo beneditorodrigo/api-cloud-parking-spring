@@ -2,6 +2,7 @@ package com.beneditorodrigo.parking.service;
 
 import com.beneditorodrigo.parking.exception.ParkingNotFoundException;
 import com.beneditorodrigo.parking.model.Parking;
+import com.beneditorodrigo.parking.repository.ParkingRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,19 +15,14 @@ import java.util.stream.Collectors;
 @Service
 public class ParkingService {
 
-    private static Map<String, Parking> parkingMap = new HashMap<>();
+    private final ParkingRepository parkingRepository;
 
-    static {
-        var id = getUUID();
-        var id1 = getUUID();
-        Parking parking = new Parking(id, "QRS-12V5", "PI", "HILUX SRV", "Branca");
-        //Parking parking1 = new Parking(id1, "AWS-55A8", "PI", "AMAROK V6", "Azul");
-        parkingMap.put(id, parking);
-        //parkingMap.put(id1, parking1);
+    public ParkingService(ParkingRepository parkingRepository) {
+        this.parkingRepository = parkingRepository;
     }
 
     public List<Parking> findAll(){
-        return parkingMap.values().stream().collect(Collectors.toList());
+        return parkingRepository.findAll();
     }
 
     private static String getUUID() {
@@ -34,30 +30,30 @@ public class ParkingService {
     }
 
     public Parking findById(String id) {
-        Parking parking = parkingMap.get(id);
-        if(parking == null) {
-            throw new ParkingNotFoundException(id);
-        }
-        return parking;
+        return parkingRepository.findById(id).orElseThrow(() ->
+                new ParkingNotFoundException(id));
     }
 
     public Parking create(Parking parkingCreate) {
         var uuid = getUUID();
         parkingCreate.setId(uuid);
         parkingCreate.setEntryDate(LocalDateTime.now());
-        parkingMap.put(uuid, parkingCreate);
+        parkingRepository.save(parkingCreate);
         return parkingCreate;
     }
 
     public void delete(String id) {
         Parking parking = findById(id);
-        parkingMap.remove(id);
+        parkingRepository.deleteById(id);
     }
 
     public Parking update(String id, Parking parkingCreate) {
         Parking parking = findById(id);
         parking.setColor(parkingCreate.getColor());
-        parkingMap.replace(id, parking);
+        parking.setState(parkingCreate.getState());
+        parking.setModel(parkingCreate.getModel());
+        parking.setLicense(parkingCreate.getLicense());
+        parkingRepository.save(parking);
         return parking;
     }
 }
